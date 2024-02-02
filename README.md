@@ -1,2 +1,2 @@
 # next-ecommerce
-Projeto E-commerce com Next.js
+Projeto E-commerce com Next.js - teste
