@@ -5,8 +5,17 @@ import { Suspense } from 'react'
 import { CartWidget } from './cart-widget'
 import { SearchForm } from './search-form'
 import Menu from './menu'
+import { ButtonLogin } from './button-login'
 
-export function Header() {
+interface HeaderProps {
+  user: {
+    id: number
+    name: string
+    email: string
+  } | null
+}
+
+export function Header({ user }: HeaderProps) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-5">
@@ -27,16 +36,20 @@ export function Header() {
 
         <div className="w-px h-4 bg-indigo-700"></div>
 
-        <Link href="/" className="flex items-center gap-2 hover:underline">
-          <span className="text-sm">Account</span>
-          <Image
-            src="https://github.com/diego3g.png"
-            className="h-6 w-6 rounded-full"
-            width={24}
-            height={24}
-            alt=""
-          />
-        </Link>
+        {user ? (
+          <Link href="/" className="flex items-center gap-2 hover:underline">
+            <Image
+              src="https://github.com/diego3g.png"
+              className="h-6 w-6 rounded-full"
+              width={24}
+              height={24}
+              alt=""
+            />
+            <span>{user.email}</span>
+          </Link>
+        ) : (
+          <ButtonLogin />
+        )}
       </div>
     </div>
   )

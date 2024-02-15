@@ -1,6 +1,4 @@
 'use client'
-
-import { Search } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FormEvent } from 'react'
 
@@ -30,14 +28,17 @@ export function SearchForm() {
       onSubmit={handleSearch}
       className="flex w-[320px] items-center gap-3 rounded-full bg-indigo-900 px-5 py-3 ring-indigo-700"
     >
-      <Search className="w-5 h-5 text-indigo-500" />
-
       <input
         name="q"
         defaultValue={query ?? ''}
-        placeholder="Buscar produtos..."
+        placeholder="Search..."
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-indigo-500"
         required
+      />
+      <input
+        type="submit"
+        value="➡️"
+        className="btn btn-primary cursor-pointer text-lg"
       />
     </form>
   )

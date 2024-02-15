@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 
 import { Product } from '@/data/types/product'
 import { api } from '@/data/api'
+import StarRating from '@/components/star-rating'
 
 interface SearchProps {
   searchParams: {
@@ -35,7 +36,7 @@ export default async function Search({ searchParams }: SearchProps) {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm">
-        {products.length} resultados para:{' '}
+        {products.length} results for:{' '}
         <span className="font-semibold">{query}</span>
       </p>
 
@@ -55,7 +56,6 @@ export default async function Search({ searchParams }: SearchProps) {
                 quality={100}
                 alt=""
               />
-
               <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w-[280px] rounded-full border-2 border-indigo-500 bg-black/60 p-1 pl-5">
                 <span className="text-sm truncate">{product.title}</span>
                 <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">
@@ -66,6 +66,10 @@ export default async function Search({ searchParams }: SearchProps) {
                     maximumFractionDigits: 0,
                   })}
                 </span>
+              </div>
+              <div className="absolute bottom-0 right-10 h-8 flex items-center gap-2 max-w-[280px] rounded-full border-2 border-indigo-500 bg-black/60 p-1 pl-5 mb-1">
+                <div className="text-sm">Rating({product.rating.count}) - </div>
+                <StarRating rate={product.rating.rate} />
               </div>
             </Link>
           )

@@ -7,7 +7,7 @@ describe('add product to cart', () => {
     cy.get('a[href^="/product"]').first().click()
 
     cy.location('pathname').should('include', '/product')
-    cy.contains('Adicionar ao carrinho').click()
+    cy.contains('Add to cart').click()
 
     cy.contains('Cart (1)').should('exist')
   })
@@ -16,8 +16,8 @@ describe('add product to cart', () => {
     cy.get('a[href^="/product"]').first().click()
 
     cy.location('pathname').should('include', '/product')
-    cy.contains('Adicionar ao carrinho').click()
-    cy.contains('Adicionar ao carrinho').click()
+    cy.contains('Add to cart').click()
+    cy.contains('Add to cart').click()
 
     cy.contains('Cart (1)').should('exist')
   })
@@ -29,7 +29,7 @@ describe('add product to cart', () => {
 
     cy.location('pathname').should('include', '/product')
 
-    cy.contains('Adicionar ao carrinho').click()
+    cy.contains('Add to cart').click()
 
     cy.contains('Cart (1)').should('exist')
   })

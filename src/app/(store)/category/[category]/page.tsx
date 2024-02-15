@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Metadata } from 'next'
 
 import { api } from '@/data/api'
 import { Product } from '@/data/types/product'
 import Link from 'next/link'
 import Image from 'next/image'
+import StarRating from '@/components/star-rating'
 
 interface CategoryProps {
   category: string
@@ -52,7 +54,7 @@ export default async function ProductPage({ params }: CategoryProps) {
     <div className="flex flex-col gap-4">
       <p className="text-md">
         <span className="p-4 text-md">
-          categoria:{' '}
+          category:{' '}
           <span className="font-semibold text-lg  uppercase">
             {firstCategory}({products.length})
           </span>
@@ -85,6 +87,10 @@ export default async function ProductPage({ params }: CategoryProps) {
                     maximumFractionDigits: 0,
                   })}
                 </span>
+              </div>
+              <div className="absolute bottom-0 right-10 h-8 flex items-center gap-2 max-w-[280px] rounded-full border-2 border-indigo-500 bg-black/60 p-1 pl-5 mb-1">
+                <div className="text-sm">Rating({product.rating.count}) - </div>
+                <StarRating rate={product.rating.rate} />
               </div>
             </Link>
           )
