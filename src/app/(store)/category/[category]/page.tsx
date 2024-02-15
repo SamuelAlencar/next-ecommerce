@@ -1,46 +1,65 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { Metadata } from 'next'
 
-import { Product } from '@/data/types/product'
 import { api } from '@/data/api'
+import { Product } from '@/data/types/product'
+import Link from 'next/link'
+import Image from 'next/image'
 
-interface SearchProps {
-  searchParams: {
-    q: string
+interface CategoryProps {
+  category: string
+  params: {
+    category: string
   }
 }
 
-async function searchProducts(query: string): Promise<Product[]> {
-  const response = await api(`?q=${query}`, {
+async function getProduct(category: string): Promise<Product> {
+  const response = await api(`/category/${category}`, {
     next: {
       revalidate: 60 * 60, // 1 hour
     },
   })
 
-  const products = await response.json()
+  const product = (await response.json()) as Product
 
-  return products
+  return product
 }
 
-export default async function Search({ searchParams }: SearchProps) {
-  const { q: query } = searchParams
+export async function generateMetadata({
+  params,
+}: CategoryProps): Promise<Metadata> {
+  const product = await getProduct(params.category)
 
-  if (!query) {
-    redirect('/')
+  return {
+    title: product.title,
   }
+}
 
-  const products = await searchProducts(query)
+export async function generateStaticParams() {
+  const response = await api(`?limit=20`)
+  const products: Product[] = await response.json()
+
+  return products.map((product) => {
+    return [{ category: product.category }]
+  })
+}
+
+export default async function ProductPage({ params }: CategoryProps) {
+  const products: any = await getProduct(params.category)
+  const firstCategory =
+    products.length > 0 ? (products[0] as CategoryProps).category : ''
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm">
-        {products.length} resultados para:{' '}
-        <span className="font-semibold">{query}</span>
+      <p className="text-md">
+        <span className="p-4 text-md">
+          categoria:{' '}
+          <span className="font-semibold text-lg  uppercase">
+            {firstCategory}({products.length})
+          </span>
+        </span>
       </p>
-
       <div className="grid grid-cols-3 gap-6">
-        {products.map((product) => {
+        {products.map((product: Product) => {
           return (
             <Link
               key={product.id}
@@ -53,7 +72,7 @@ export default async function Search({ searchParams }: SearchProps) {
                 width={480}
                 height={480}
                 quality={100}
-                alt=""
+                alt={product.title}
               />
 
               <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w-[280px] rounded-full border-2 border-indigo-500 bg-black/60 p-1 pl-5">

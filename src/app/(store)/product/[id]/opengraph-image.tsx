@@ -17,8 +17,8 @@ export const size = {
 
 export const contentType = 'image/png'
 
-async function getProduct(slug: string): Promise<Product> {
-  const response = await api(`/products/${slug}`, {
+async function getProduct(id: string): Promise<Product> {
+  const response = await api(`/${id}`, {
     next: {
       revalidate: 60 * 15, // 15 minutes
     },

@@ -7,18 +7,18 @@ import { AddToCartButton } from '@/components/add-to-cart-button'
 
 interface ProductProps {
   params: {
-    slug: string
+    id: string
   }
 }
 
-async function getProduct(slug: string): Promise<Product> {
-  const response = await api(`/products/${slug}`, {
+async function getProduct(id: string): Promise<Product> {
+  const response = await api(`/${id}`, {
     next: {
       revalidate: 60 * 60, // 1 hour
     },
   })
 
-  const product = await response.json()
+  const product = (await response.json()) as Product
 
   return product
 }
@@ -26,7 +26,7 @@ async function getProduct(slug: string): Promise<Product> {
 export async function generateMetadata({
   params,
 }: ProductProps): Promise<Metadata> {
-  const product = await getProduct(params.slug)
+  const product = await getProduct(params.id)
 
   return {
     title: product.title,
@@ -34,19 +34,19 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const response = await api('/products/featured')
+  const response = await api(`?limit=3`)
   const products: Product[] = await response.json()
 
   return products.map((product) => {
-    return { slug: product.slug }
+    return [{ id: product.id }]
   })
 }
 
 export default async function ProductPage({ params }: ProductProps) {
-  const product = await getProduct(params.slug)
+  const product = await getProduct(params.id)
 
   return (
-    <div className="relative grid max-h-[860px] grid-cols-3">
+    <div className="relative grid max-h-[600px] grid-cols-3">
       <div className="col-span-2 overflow-hidden">
         <Image
           src={product.image}
